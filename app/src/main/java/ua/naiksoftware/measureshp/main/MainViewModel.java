@@ -23,7 +23,7 @@ public class MainViewModel extends BaseViewModel {
     public MainViewModel() {
         manageDisposable(SingleCachedComplete.from(RestClient.getPx500Repository().search("ecology",
                 "Abstract,Nature,City & Architecture,Urban Exploration,Journalism,Landscapes",
-                1, Px500Photo.SIZE_1600, 1 + random.nextInt(50)).delay(15, TimeUnit.SECONDS))
+                1, Px500Photo.SIZE_1600, 1 + random.nextInt(50)))
                 .map(px500SearchResponse -> px500SearchResponse.getPhotos().get(random.nextInt(px500SearchResponse.getPhotos().size())))
                 .map(px500Photo -> px500Photo.getImages().get(0).getUrl())
                 .repeatWhen(objectFlowable -> objectFlowable.delay(15, TimeUnit.SECONDS))
