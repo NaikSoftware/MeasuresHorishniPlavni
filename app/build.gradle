@@ -1,0 +1,69 @@
+apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+
+Properties config = new Properties()
+
+if (project.rootProject.file('config.properties').canRead()) {
+    config.load(new FileInputStream(project.rootProject.file('config.properties')))
+}
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "26.0.0"
+
+    dataBinding {
+        enabled true
+    }
+
+    defaultConfig {
+        applicationId "ua.naiksoftware.measureshp"
+        minSdkVersion 21
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField 'String', 'RECAPTCHA_SITE_KEY', '\"' + config.get("recaptcha.site_key", "") + '\"'
+            buildConfigField 'String', 'RECAPTCHA_SECRET_KEY', '\"' + config.get("recaptcha.secret_key", "") + '\"'
+            buildConfigField 'String', 'PX500_CONSUMER_KEY', '\"' + config.get("px500.consumer_key", "") + '\"'
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField 'String', 'RECAPTCHA_SITE_KEY', '\"' + config.get("recaptcha.site_key", "") + '\"'
+            buildConfigField 'String', 'RECAPTCHA_SECRET_KEY', '\"' + config.get("recaptcha.secret_key", "") + '\"'
+            buildConfigField 'String', 'PX500_CONSUMER_KEY', '\"' + config.get("px500.consumer_key", "") + '\"'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
+
+    compile ("android.arch.lifecycle:runtime:1.0.0-alpha8")
+    compile ("android.arch.lifecycle:extensions:1.0.0-alpha8") {
+        exclude group: 'com.android.support'
+    }
+    annotationProcessor "android.arch.lifecycle:compiler:1.0.0-alpha8"
+
+    compile "io.reactivex.rxjava2:rxjava:2.1.2"
+
+    compile 'com.google.android.gms:play-services-safetynet:11.0.4'
+
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+
+    compile 'com.github.bumptech.glide:glide:4.0.0'
+
+    compile 'com.jakewharton.timber:timber:4.5.1'
+}
