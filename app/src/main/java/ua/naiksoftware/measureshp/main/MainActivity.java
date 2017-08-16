@@ -1,17 +1,24 @@
- package ua.naiksoftware.measureshp.main;
+package ua.naiksoftware.measureshp.main;
 
- import android.arch.lifecycle.ViewModelProviders;
- import android.databinding.DataBindingUtil;
- import android.os.Bundle;
- import android.support.design.widget.Snackbar;
- import android.view.Menu;
- import android.view.MenuItem;
+import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.DataBindingUtil;
+import android.os.Bundle;
+import android.transition.ChangeBounds;
+import android.transition.ChangeImageTransform;
+import android.transition.ChangeTransform;
+import android.transition.Fade;
+import android.transition.TransitionSet;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
- import ua.naiksoftware.measureshp.R;
- import ua.naiksoftware.measureshp.common.BaseActivity;
- import ua.naiksoftware.measureshp.databinding.ActivityMainBinding;
+import ua.naiksoftware.measureshp.R;
+import ua.naiksoftware.measureshp.common.BaseActivity;
+import ua.naiksoftware.measureshp.databinding.ActivityMainBinding;
 
- public class MainActivity extends BaseActivity {
+import static android.transition.TransitionSet.ORDERING_TOGETHER;
+
+public class MainActivity extends BaseActivity {
 
     private ActivityMainBinding binding;
 
@@ -24,8 +31,27 @@
         binding.setViewModel(viewModel);
 
         setSupportActionBar(binding.toolbar);
-        binding.fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+    }
+
+    public void onAddNewProvider(View view) {
+        CreateDialogFragment dialog = new CreateDialogFragment();
+        dialog.setSharedElementEnterTransition(new DetailsTransition());
+        dialog.setSharedElementReturnTransition(new DetailsTransition());
+//        dialog.show(getSupportFragmentManager(), "create_dialog");
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addSharedElement(view, "create_dialog_transition")
+                .add(R.id.coordinator_layout, dialog)
+                .commit();
+    }
+
+    public class DetailsTransition extends TransitionSet {
+        public DetailsTransition() {
+            setOrdering(ORDERING_TOGETHER);
+            addTransition(new ChangeBounds()).
+                    addTransition(new ChangeTransform()).
+                    addTransition(new ChangeImageTransform());
+        }
     }
 
     @Override
