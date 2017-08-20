@@ -1,13 +1,10 @@
 package ua.naiksoftware.measureshp.main;
 
+import android.app.ActivityOptions;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.transition.ChangeBounds;
-import android.transition.ChangeImageTransform;
-import android.transition.ChangeTransform;
-import android.transition.Fade;
-import android.transition.TransitionSet;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,9 +13,9 @@ import ua.naiksoftware.measureshp.R;
 import ua.naiksoftware.measureshp.common.BaseActivity;
 import ua.naiksoftware.measureshp.databinding.ActivityMainBinding;
 
-import static android.transition.TransitionSet.ORDERING_TOGETHER;
-
 public class MainActivity extends BaseActivity {
+
+    private static final int RC_PROVIDER_ADD = 1;
 
     private ActivityMainBinding binding;
 
@@ -34,41 +31,21 @@ public class MainActivity extends BaseActivity {
     }
 
     public void onAddNewProvider(View view) {
-        CreateDialogFragment dialog = new CreateDialogFragment();
-        dialog.setSharedElementEnterTransition(new DetailsTransition());
-        dialog.setSharedElementReturnTransition(new DetailsTransition());
-//        dialog.show(getSupportFragmentManager(), "create_dialog");
-        getSupportFragmentManager()
-                .beginTransaction()
-                .addSharedElement(view, "create_dialog_transition")
-                .add(R.id.coordinator_layout, dialog)
-                .commit();
-    }
-
-    public class DetailsTransition extends TransitionSet {
-        public DetailsTransition() {
-            setOrdering(ORDERING_TOGETHER);
-            addTransition(new ChangeBounds()).
-                    addTransition(new ChangeTransform()).
-                    addTransition(new ChangeImageTransform());
-        }
+        Intent intent = new Intent(this, CreateDialogActivity.class);
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this, binding.fab, CreateDialogActivity.DIALOG_TRANSITION_NAME);
+        startActivityForResult(intent, RC_PROVIDER_ADD, options.toBundle());
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }

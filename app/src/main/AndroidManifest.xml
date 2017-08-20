@@ -22,7 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".main.CreateDialogActivity" />
+        <activity android:name=".main.CreateDialogActivity"
+            android:theme="@style/AppTheme.Transparent"/>
     </application>
 
 </manifest>

@@ -68,8 +68,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin"
             android:onClick="onAddNewProvider"
-            android:transitionName="create_dialog_transition"
+            android:transitionName="dialog_transition"
             app:layout_anchor="@id/app_bar"
+            app:layout_behavior=""
             app:layout_anchorGravity="bottom|end"
             app:srcCompat="@drawable/ic_add_white_24dp" />
 
